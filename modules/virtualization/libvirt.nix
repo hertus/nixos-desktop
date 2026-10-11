@@ -13,12 +13,6 @@
 
       # Software TPM 2.0 emulation (strict requirement for Windows 11)
       swtpm.enable = true;
-
-      # UEFI firmware with SecureBoot keys support
-      ovmf = {
-        enable = true;
-        packages = [ pkgs.OVMFFull.fd ];
-      };
     };
   };
 

@@ -30,6 +30,8 @@ lib.mkIf isIntel {
   # Laptop Battery & Power Management
   # Thermald manages thermal zones on Intel CPUs to prevent throttling.
   # TLP optimizes battery runtime, CPU frequency scaling, and PCIe power savings.
+  # Note: power-profiles-daemon (default in KDE Plasma 6) must be disabled to prevent conflict with TLP.
+  services.power-profiles-daemon.enable = false;
   services.thermald.enable = true;
   services.tlp = {
     enable = true;
