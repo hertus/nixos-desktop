@@ -48,7 +48,7 @@
     logseq
     protonmail-desktop
     proton-pass
-    protonvpn-gui
+    proton-vpn
     kdePackages.spectacle
     flameshot
 
