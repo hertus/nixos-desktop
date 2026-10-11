@@ -3,11 +3,16 @@
 
 {
   environment.systemPackages = with pkgs; [
+    # Essentials
+    git
+    vim # nano is installed by default builtin
+    wget
+    curl
+
     # Infrastructure as Code & Containers
     ansible
     ansible-lint
     docker-compose
-
 
     # Hardware Diagnostics (Common)
     cpu-x

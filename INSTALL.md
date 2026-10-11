@@ -44,9 +44,20 @@ lsblk
 ```
 > In the commands below, we assume the target disk is `/dev/nvme0n1`. If your disk is `/dev/sda`, adapt accordingly.
 
+### Quick Automated Option (Using the Partition Script)
+
+You can run the included automated setup script instead of executing manual commands:
+```bash
+# Clone or curl the script, or run directly from your repo:
+curl -fsSL https://raw.githubusercontent.com/<YOUR-USERNAME>/nixos-desktop/main/scripts/partition-and-mount.sh -o partition.sh
+chmod +x partition.sh
+sudo ./partition.sh /dev/nvme0n1
+```
+The script will prompt for confirmation (`YES`), wipe the disk, setup the ESP (`boot`) and LUKS (`cryptroot`), create the `@`, `@home`, and `@nix` Btrfs subvolumes, and mount everything to `/mnt`.
+
 ---
 
-### Scenario A: Encrypted LUKS + Btrfs Layout (Matching `custom.storage.encryption`)
+### Manual Setup Steps (Scenario A)
 
 #### 3.A.1 Partition the Disk
 Create two partitions: a `512MB` UEFI boot partition and the encrypted system container partition:
