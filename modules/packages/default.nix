@@ -19,8 +19,10 @@
     tpm2-tools
 
     # Enterprise Access & Remote Apps
-    citrix_workspace
-    freerdp3
+    # Note: citrix_workspace is disabled by default because upstream Citrix requires deprecated libsoup-2.4.
+    # To enable: uncomment citrix_workspace and add "libsoup-2.4.1" to nixpkgs.config.permittedInsecurePackages.
+    # citrix_workspace
+    freerdp
     remmina
     bottles
 
@@ -28,7 +30,7 @@
     brave
     chromium
     teams-for-linux
-    teamspeak5_client
+    teamspeak6-client
     threema-desktop
     signal-desktop
 

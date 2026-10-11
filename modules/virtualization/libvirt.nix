@@ -36,7 +36,7 @@
 
     # TPM 2.0 & Windows VirtIO Drivers ISO
     swtpm
-    win-virtio # Exposes VirtIO driver ISO in /run/current-system/sw/share/virtio-win/
+    virtio-win # Exposes VirtIO driver ISO in /run/current-system/sw/share/virtio-win/
 
     # Quickemu (fast CLI / automated Windows 11 testing setup)
     quickemu

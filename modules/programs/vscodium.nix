@@ -2,26 +2,22 @@
 { pkgs, ... }:
 
 let
+  # vscodeExtensions packaged in nixpkgs (official and verified namespace)
   vscodiumCustom = pkgs.vscode-with-extensions.override {
     vscode = pkgs.vscodium;
     vscodeExtensions = with pkgs.vscode-extensions; [
-      # Remote & Source Control
-      jeanp413.open-remote-ssh
-      eamodio.gitlens
-
-      # Languages & Development Runtimes
-      ms-python.python
-      ms-vscode.powershell
+      # Languages & Runtimes
       golang.go
-      ms-azuretools.vscode-docker
+      ms-python.python
 
-      # Data & File Formatters / Linters
-      mechatroner.rainbow-csv
-      redhat.vscode-xml
+      # Formatters & Linters
       redhat.vscode-yaml
+      redhat.vscode-xml
       redhat.ansible
       esbenp.prettier-vscode
       tamasfe.even-better-toml
+      mechatroner.rainbow-csv
+      eamodio.gitlens
     ];
   };
 in
@@ -30,4 +26,3 @@ in
     vscodiumCustom
   ];
 }
-
