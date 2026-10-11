@@ -144,7 +144,7 @@ cd /mnt/etc/nixos
 mv configuration.nix configuration.nix.orig
 
 # Clone repository files directly into /mnt/etc/nixos
-git clone https://github.com/<YOUR-USERNAME>/nixos-desktop.git repo
+git clone https://github.com/hertus/nixos-desktop.git repo
 cp -r repo/* .
 rm -rf repo
 ```
