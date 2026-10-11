@@ -22,6 +22,29 @@
   networking.hostName = "nixos-nb";
   networking.networkmanager.enable = true;
 
+  # Time Zone & Localization
+  time.timeZone = "Europe/Zurich";
+
+  # Swiss German Keyboard Layout (X11, Wayland, and Virtual Console)
+  services.xserver.xkb = {
+    layout = "ch";
+    variant = "de_nodeadkeys";
+  };
+  console.keyMap = "sg";
+
+  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "de_CH.UTF-8";
+    LC_IDENTIFICATION = "de_CH.UTF-8";
+    LC_MEASUREMENT = "de_CH.UTF-8";
+    LC_MONETARY = "de_CH.UTF-8";
+    LC_NAME = "de_CH.UTF-8";
+    LC_NUMERIC = "de_CH.UTF-8";
+    LC_PAPER = "de_CH.UTF-8";
+    LC_TELEPHONE = "de_CH.UTF-8";
+    LC_TIME = "de_CH.UTF-8";
+  };
+
   # Hardware Profile Selection:
   # Options: "amd-workstation" (default) | "intel-laptop" | "generic"
 #   custom.hardware.profile = "amd-workstation";

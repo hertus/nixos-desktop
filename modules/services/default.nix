@@ -18,7 +18,6 @@
 
   # Background Daemons
   services.ollama.enable = true;
-  services.onedrive.enable = true;
   programs.starship.enable = true;
 
   # Gaming

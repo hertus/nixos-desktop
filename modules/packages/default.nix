@@ -39,6 +39,10 @@
     threema-desktop
     signal-desktop
 
+    # Cloud Storage & Synchronization (Modern OneDrive / Multi-Cloud Alternatives)
+    rclone             # High-performance sync/mount for OneDrive, SharePoint, Google Drive, etc.
+    celeste            # Modern GUI cloud sync client (supports OneDrive, Google Drive, Nextcloud, etc.)
+
     # Media, Notes & Proton Suite
     vlc
     logseq
