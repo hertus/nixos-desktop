@@ -8,7 +8,10 @@
     vim # nano is installed by default builtin
     wget
     curl
-
+    htop
+    tcpdump
+    openssl
+    
     # Infrastructure as Code & Containers
     ansible
     ansible-lint
@@ -36,7 +39,7 @@
     chromium
     teams-for-linux
     teamspeak6-client
-    threema-desktop
+    # threema-desktop is superseded by the Threema Flatpak in modules/services/flatpak.nix
     signal-desktop
 
     # Cloud Storage & Synchronization (Modern OneDrive / Multi-Cloud Alternatives)

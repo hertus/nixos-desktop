@@ -9,6 +9,7 @@
     ./desktop/plasma.nix
     ./services/default.nix
     ./services/networking.nix
+    ./services/flatpak.nix
     ./security/auth.nix
     ./virtualization/libvirt.nix
     ./users/hertus.nix
