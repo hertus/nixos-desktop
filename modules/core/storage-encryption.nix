@@ -42,26 +42,26 @@ in
 
     # Btrfs Subvolume Layout over LUKS
     fileSystems."/" = {
-      device = "/dev/mapper/${cfg.dmName}";
-      fsType = "btrfs";
+      device = mkDefault "/dev/mapper/${cfg.dmName}";
+      fsType = mkDefault "btrfs";
       options = [ "subvol=@" "compress=zstd" "noatime" ];
     };
 
     fileSystems."/home" = {
-      device = "/dev/mapper/${cfg.dmName}";
-      fsType = "btrfs";
+      device = mkDefault "/dev/mapper/${cfg.dmName}";
+      fsType = mkDefault "btrfs";
       options = [ "subvol=@home" "compress=zstd" "noatime" ];
     };
 
     fileSystems."/nix" = {
-      device = "/dev/mapper/${cfg.dmName}";
-      fsType = "btrfs";
+      device = mkDefault "/dev/mapper/${cfg.dmName}";
+      fsType = mkDefault "btrfs";
       options = [ "subvol=@nix" "compress=zstd" "noatime" ];
     };
 
     fileSystems."/boot" = {
-      device = "/dev/disk/by-partlabel/boot";
-      fsType = "vfat";
+      device = mkDefault "/dev/disk/by-partlabel/boot";
+      fsType = mkDefault "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
   };
