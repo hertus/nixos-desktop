@@ -16,14 +16,23 @@ This configuration splits concerns into isolated modules rather than maintaining
 └── modules/
     ├── default.nix                  # Central module aggregator
     ├── core/
-    │   ├── boot.nix                 # systemd-boot, TPM 2.0 auto-unlock, LUKS cryptroot, Btrfs subvolumes
-    │   └── hardware.nix             # AMD CPU microcode, AMDGPU drivers, VAAPI/VDPAU, PipeWire, Bluetooth
+    │   ├── boot.nix                 # systemd-boot loader and EFI configuration
+    │   └── storage-encryption.nix   # (Optional) LUKS cryptroot, TPM 2.0 auto-unlock & Btrfs subvolumes
+    ├── hardware/
+    │   ├── default.nix              # Hardware profile selector (amd-workstation | intel-laptop | generic)
+    │   ├── common.nix               # Base PipeWire audio, Bluetooth, and OpenGL/Vulkan foundation
+    │   ├── amd-workstation.nix      # AMD AM4 microcode, AMDGPU drivers, VAAPI/VDPAU, nested kvm-amd
+    │   └── intel-laptop.nix         # Dell Intel Evo i7 microcode, Iris Xe media drivers, thermald & TLP
     ├── desktop/
     │   └── plasma.nix               # KDE Plasma 6 (Wayland), SDDM display manager, default XDG MIME handlers
     ├── packages/
     │   └── default.nix              # Main system packages organized by category
     ├── programs/
     │   └── vscodium.nix             # Custom VSCodium build bundled with curated extensions
+    ├── security/
+    │   └── auth.nix                 # Biometrics (Howdy face recognition), FIDO2 PIN (PAM U2F), fprintd
+    ├── virtualization/
+    │   └── libvirt.nix              # KVM, QEMU, libvirt, swtpm (TPM2 for Win11), virt-manager, Quickemu
     └── services/
         ├── default.nix              # Docker, FIDO2/YubiKey/TPM2 daemons, Ollama, Steam/Gamemode
         └── networking.nix           # WireGuard CLI tools & NetBird mesh VPN daemon
@@ -33,19 +42,35 @@ This configuration splits concerns into isolated modules rather than maintaining
 
 ## Core System Architecture
 
-### 1. Boot, Encryption & Storage ([`modules/core/boot.nix`](./modules/core/boot.nix))
-- **Bootloader**: `systemd-boot` with EFI variable modification enabled.
-- **Stage 1 TPM 2.0**: Uses `systemd` in initrd (`boot.initrd.systemd.enable`) and `boot.initrd.systemd.tpm2.enable` for secure, hands-free volume unlocking bound to PCR registers.
-- **Storage Layout**: Single LUKS container (`cryptroot`) partitioned into Btrfs subvolumes:
-  - `@` mounted at `/` (compressed with `zstd`, `noatime`)
-  - `@home` mounted at `/home`
-  - `@nix` mounted at `/nix`
-  - UEFI partition formatted as `vfat` mounted at `/boot` (`fmask=0077`, `dmask=0077`)
+### 1. Boot, Encryption & Storage ([`modules/core/boot.nix`](./modules/core/boot.nix) & [`modules/core/storage-encryption.nix`](./modules/core/storage-encryption.nix))
+- **Bootloader**: `systemd-boot` with EFI variable modification enabled (`modules/core/boot.nix`).
+- **Disk Encryption & TPM Auto-Unlock (Optional, disabled by default)**:
+  - Extracted into [`modules/core/storage-encryption.nix`](./modules/core/storage-encryption.nix) as a first-class toggle.
+  - When **disabled (default)**, disk mounts and filesystems are read purely from `hardware-configuration.nix` generated during system installation.
+  - When **enabled**, applies LUKS device mapping (`cryptroot`) and Btrfs subvolumes (`@`, `@home`, `@nix`), with optional PCR-bound TPM 2.0 unlocking.
+  - **To enable in `configuration.nix`**:
+    ```nix
+    custom.storage.encryption = {
+      enable = true;
+      tpmAutoUnlock = true;
+      device = "/dev/disk/by-partlabel/cryptroot"; # default
+    };
+    ```
 
-### 2. Hardware Acceleration & Audio ([`modules/core/hardware.nix`](./modules/core/hardware.nix))
-- **GPU & Video**: `amdgpu` driver with 32-bit graphics support, `vaapiVdpau`, and `libvdpau-va-gl` video acceleration.
-- **CPU**: AMD microcode updates enabled.
-- **Audio**: PipeWire with ALSA (including 32-bit), PulseAudio emulation layer, and `rtkit` real-time scheduling.
+### 2. Hardware Profiles ([`modules/hardware/`](./modules/hardware/))
+Switch profiles easily in `configuration.nix` via `custom.hardware.profile`:
+- **AMD Workstation (`amd-workstation`)** (Default):
+  - AMD AM4 microcode updates & `kvm-amd` (with nested virtualization).
+  - `amdgpu` driver with 32-bit graphics support, `vaapiVdpau`, and `libvdpau-va-gl` video acceleration.
+- **Dell Intel Evo Laptop (`intel-laptop`)**:
+  - Intel CPU microcode updates & `kvm-intel` (with nested virtualization).
+  - Intel Iris Xe / UHD integrated graphics hardware acceleration via `intel-media-driver` (VA-API), `intel-compute-runtime` (OpenCL), and `vpl-gpu-rt` (oneVPL).
+  - 32-bit Intel media acceleration for gaming/apps.
+  - Laptop battery & thermal daemon management: **`thermald`** (thermal zone regulation) and **`tlp`** (CPU governors on AC vs. Battery, energy performance policies).
+  - Touchpad (`libinput`) & battery reporting (`upower`).
+- **Common Base (`common.nix`)**:
+  - Shared PipeWire audio (ALSA 32-bit, PulseAudio emulation, `rtkit`).
+  - Bluetooth daemon (`powerOnBoot = true`).
 
 ### 3. Desktop Environment ([`modules/desktop/plasma.nix`](./modules/desktop/plasma.nix))
 - **KDE Plasma 6**: SDDM Wayland greeter.
@@ -55,7 +80,20 @@ This configuration splits concerns into isolated modules rather than maintaining
 - **WireGuard**: `wireguard-tools` installed for manual/scripted tunnels (`wg`, `wg-quick`).
 - **NetBird**: `services.netbird.enable = true` manages the NetBird background daemon systemd service. Connect via CLI (`netbird up`) or enable GUI (`netbird-ui`).
 
-### 5. Programs & Packages ([`modules/programs/`](./modules/programs/) & [`modules/packages/`](./modules/packages/))
+### 5. Authentication, PIN & Biometrics ([`modules/security/auth.nix`](./modules/security/auth.nix))
+- **Face Login (Howdy)**: Windows Hello-style authentication using camera sensors (IR recommended). Enrolls face profiles via `sudo howdy add`.
+- **FIDO2 Hardware PIN (PAM U2F)**: Allows unlocking SDDM, TTY login, lockscreen, and `sudo` by tapping a FIDO2 token and entering its PIN (`userverification = 1`).
+- **Fingerprint (`fprintd`)**: Optional scanner integration for SDDM and KDE lockscreen.
+
+### 6. Desktop Virtualization & Windows 11 ([`modules/virtualization/libvirt.nix`](./modules/virtualization/libvirt.nix))
+- **Kernel Virtualization**: KVM/QEMU managed by `libvirtd` with nested AMD virtualization enabled (`nested=1` for WSL2/Docker inside guest).
+- **Windows 11 Readiness**:
+  - `swtpm.enable = true`: Emulates a physical TPM 2.0 security chip.
+  - `OVMFFull.fd`: SecureBoot-capable UEFI guest firmware.
+  - `win-virtio`: Pre-packages Red Hat VirtIO storage, network, and memory balloon drivers.
+- **Desktop UI**: `virt-manager` for full VM management, SPICE USB redirection, and `quickemu`/`quickgui` for fast automated VM spins.
+
+### 7. Programs & Packages ([`modules/programs/`](./modules/programs/) & [`modules/packages/`](./modules/packages/))
 - **Isolated VSCodium**: [`modules/programs/vscodium.nix`](./modules/programs/vscodium.nix) cleanly keeps the `let ... in` extension list out of the main package definitions.
 - **System Packages**: [`modules/packages/default.nix`](./modules/packages/default.nix) groups software logically (DevOps/IaC, SecOps, Hardware Diagnostics, Remote Apps, Media, Browsers).
 

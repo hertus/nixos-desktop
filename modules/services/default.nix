@@ -10,7 +10,6 @@
 
   # FIDO2, WebAuthn & TPM Security
   security.tpm2.enable = true;
-  security.pam.u2f.enable = true;
   services.pcscd.enable = true;
   services.udev.packages = with pkgs; [
     libfido2

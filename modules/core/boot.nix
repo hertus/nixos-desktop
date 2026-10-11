@@ -2,40 +2,15 @@
 { ... }:
 
 {
-  # Bootloader & Stage-1 TPM 2.0 Auto-Unlock
+  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.systemd.enable = true;
-  boot.initrd.systemd.tpm2.enable = true;
 
-  boot.initrd.luks.devices."cryptroot" = {
-    device = "/dev/disk/by-partlabel/cryptroot";
-    crypttabExtraOpts = [ "tpm2-device=auto" ];
-  };
-
-  # Btrfs Subvolume Layout
-  fileSystems."/" = {
-    device = "/dev/mapper/cryptroot";
-    fsType = "btrfs";
-    options = [ "subvol=@" "compress=zstd" "noatime" ];
-  };
-
-  fileSystems."/home" = {
-    device = "/dev/mapper/cryptroot";
-    fsType = "btrfs";
-    options = [ "subvol=@home" "compress=zstd" "noatime" ];
-  };
-
-  fileSystems."/nix" = {
-    device = "/dev/mapper/cryptroot";
-    fsType = "btrfs";
-    options = [ "subvol=@nix" "compress=zstd" "noatime" ];
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-partlabel/boot";
-    fsType = "vfat";
-    options = [ "fmask=0077" "dmask=0077" ];
-  };
+  # Note on Disks & LUKS:
+  # Disk partitioning and LUKS encryption configurations are defined in
+  # `modules/core/storage-encryption.nix` and can be toggled via:
+  #   custom.storage.encryption.enable = true;
+  #   custom.storage.encryption.tpmAutoUnlock = true;
+  # When disabled (default), standard filesystems are inherited from
+  # `./hardware-configuration.nix`.
 }
-
