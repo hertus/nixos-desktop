@@ -39,9 +39,9 @@
   # 2. Register key: `mkdir -p ~/.config/Yubico && pamu2fcfg -P -N > ~/.config/Yubico/u2f_keys`
   security.pam.u2f = {
     enable = true;
-    cue = true;              # Provides visual cue prompt to touch the key
     control = "sufficient";  # Allows FIDO2/PIN to satisfy authentication without password
     settings = {
+      cue = true;              # Provides visual cue prompt to touch the key
       userverification = 1;  # Enforces FIDO2 PIN verification
     };
   };

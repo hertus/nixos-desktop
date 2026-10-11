@@ -8,8 +8,6 @@
     ansible-lint
     docker-compose
 
-    # Desktop Docks
-    cairo-dock
 
     # Hardware Diagnostics (Common)
     cpu-x
