@@ -36,7 +36,7 @@ in
     boot.initrd.systemd.tpm2.enable = cfg.tpmAutoUnlock;
 
     boot.initrd.luks.devices."${cfg.dmName}" = {
-      device = cfg.device;
+      device = mkDefault cfg.device;
       crypttabExtraOpts = mkIf cfg.tpmAutoUnlock [ "tpm2-device=auto" ];
     };
 
