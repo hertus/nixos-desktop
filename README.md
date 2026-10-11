@@ -62,12 +62,14 @@ Switch profiles easily in `configuration.nix` via `custom.hardware.profile`:
 - **AMD Workstation (`amd-workstation`)** (Default):
   - AMD AM4 microcode updates & `kvm-amd` (with nested virtualization).
   - `amdgpu` driver with 32-bit graphics support, `vaapiVdpau`, and `libvdpau-va-gl` video acceleration.
+  - **AMD Diagnostics & Tools**: `radeontop` (live GPU utilization monitor), `nvtopPackages.amd` (htop-style GPU process monitor), and `vulkan-tools` (`vulkaninfo`, `vkcube`).
 - **Dell Intel Evo Laptop (`intel-laptop`)**:
   - Intel CPU microcode updates & `kvm-intel` (with nested virtualization).
   - Intel Iris Xe / UHD integrated graphics hardware acceleration via `intel-media-driver` (VA-API), `intel-compute-runtime` (OpenCL), and `vpl-gpu-rt` (oneVPL).
   - 32-bit Intel media acceleration for gaming/apps.
   - Laptop battery & thermal daemon management: **`thermald`** (thermal zone regulation) and **`tlp`** (CPU governors on AC vs. Battery, energy performance policies).
   - Touchpad (`libinput`) & battery reporting (`upower`).
+  - **Intel Diagnostics & Power Tools**: `intel-gpu-tools` (`intel_gpu_top`), `libva-utils` (`vainfo` to inspect VA-API hardware codecs), `powertop` (battery discharge monitor), and `vulkan-tools`.
 - **Common Base (`common.nix`)**:
   - Shared PipeWire audio (ALSA 32-bit, PulseAudio emulation, `rtkit`).
   - Bluetooth daemon (`powerOnBoot = true`).

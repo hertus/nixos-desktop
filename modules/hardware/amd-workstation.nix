@@ -16,5 +16,12 @@
     vaapiVdpau
     libvdpau-va-gl
   ];
+
+  # AMD GPU Diagnostics, Vulkan & Hardware Monitoring Tools
+  environment.systemPackages = with pkgs; [
+    radeontop          # Real-time AMD Radeon GPU utilization monitor
+    nvtopPackages.amd  # htop-like monitor supporting AMDGPU
+    vulkan-tools       # vkcube, vulkaninfo
+  ];
 }
 

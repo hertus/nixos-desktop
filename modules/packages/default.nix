@@ -11,12 +11,9 @@
     # Desktop Docks
     cairo-dock
 
-    # Hardware Diagnostics
+    # Hardware Diagnostics (Common)
     cpu-x
-    radeontop
-    nvtopPackages.amd
     clinfo
-    vulkan-tools
 
     # Security & Secrets Management
     keepassxc

@@ -45,5 +45,13 @@
   # Touchpad support & power optimization
   services.libinput.enable = true;
   services.upower.enable = true;
+
+  # Intel GPU Diagnostics, VA-API Inspection & Power Monitoring Tools
+  environment.systemPackages = with pkgs; [
+    intel-gpu-tools    # intel_gpu_top, intel_reg, etc.
+    libva-utils        # vainfo (inspect VA-API hardware decode/encode codecs)
+    powertop           # Real-time power consumption and battery discharge monitor
+    vulkan-tools       # vkcube, vulkaninfo for Iris Xe
+  ];
 }
 
