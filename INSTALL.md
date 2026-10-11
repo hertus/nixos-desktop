@@ -176,14 +176,11 @@ networking.hostName = "nixos-workstation"; # or "nixos-laptop"
   custom.storage.encryption.enable = false;
   ```
 
-### 5.4 Define Initial User Account
-Ensure you have a user with `sudo` permissions defined. If not already present in your modules:
-```nix
-users.users.<your-username> = {
-  isNormalUser = true;
-  extraGroups = [ "wheel" "networkmanager" "docker" "libvirtd" ];
-};
-```
+### 5.4 Pre-configured User Account (`hertus`)
+A dedicated user module is already configured in [`modules/users/hertus.nix`](./modules/users/hertus.nix) with full `sudo` (`wheel`), `networkmanager`, `docker`, and `libvirtd` permissions:
+- Default Username: `hertus`
+- Password will be set in Step 6 via `passwd`.
+- If you need a different username, rename or edit [`modules/users/hertus.nix`](./modules/users/hertus.nix).
 
 ---
 
@@ -196,9 +193,9 @@ nixos-install
 
 You will be prompted to set the `root` user password.
 
-Set password for your regular user:
+Set password for your regular user (`hertus`):
 ```bash
-nixos-enter --root /mnt -c 'passwd <your-username>'
+nixos-enter --root /mnt -c 'passwd hertus'
 ```
 
 ---

@@ -1,7 +1,10 @@
 # modules/hardware/intel-laptop.nix
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-{
+let
+  isIntel = config.custom.hardware.profile == "intel-laptop";
+in
+lib.mkIf isIntel {
   # Intel CPU Microcode & KVM
   hardware.cpu.intel.updateMicrocode = true;
   boot.kernelModules = [ "kvm-intel" ];
@@ -54,4 +57,3 @@
     vulkan-tools       # vkcube, vulkaninfo for Iris Xe
   ];
 }
-

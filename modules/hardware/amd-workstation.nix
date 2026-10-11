@@ -1,7 +1,10 @@
 # modules/hardware/amd-workstation.nix
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-{
+let
+  isAmd = config.custom.hardware.profile == "amd-workstation";
+in
+lib.mkIf isAmd {
   # AMD Ryzen (AM4) CPU Microcode & KVM
   hardware.cpu.amd.updateMicrocode = true;
   boot.kernelModules = [ "kvm-amd" "amdgpu" ];
@@ -24,4 +27,3 @@
     vulkan-tools       # vkcube, vulkaninfo
   ];
 }
-

@@ -11,6 +11,7 @@
     ./services/networking.nix
     ./security/auth.nix
     ./virtualization/libvirt.nix
+    ./users/hertus.nix
     ./packages/default.nix
     ./programs/vscodium.nix
   ];

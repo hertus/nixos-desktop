@@ -32,6 +32,8 @@ This configuration splits concerns into isolated modules rather than maintaining
     │   └── vscodium.nix             # Custom VSCodium build bundled with curated extensions
     ├── security/
     │   └── auth.nix                 # Biometrics (Howdy face recognition), FIDO2 PIN (PAM U2F), fprintd
+    ├── users/
+    │   └── hertus.nix               # User account with sudo (wheel), docker, libvirtd, video/audio groups
     ├── virtualization/
     │   └── libvirt.nix              # KVM, QEMU, libvirt, swtpm (TPM2 for Win11), virt-manager, Quickemu
     └── services/

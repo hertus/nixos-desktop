@@ -22,16 +22,8 @@ in
 
   imports = [
     ./common.nix
-  ];
-
-  config = mkMerge [
-    (mkIf (cfg.profile == "amd-workstation") {
-      imports = [ ./amd-workstation.nix ];
-    })
-
-    (mkIf (cfg.profile == "intel-laptop") {
-      imports = [ ./intel-laptop.nix ];
-    })
+    ./amd-workstation.nix
+    ./intel-laptop.nix
   ];
 }
 
