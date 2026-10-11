@@ -9,7 +9,16 @@
 
   # System & Base Networking
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    permittedInsecurePackages = [
+      "electron-39.8.10"
+      "electron-39"
+      "electron-29"
+      "electron-28"
+      "electron-27"
+    ];
+  };
   networking.hostName = "nixos-nb";
   networking.networkmanager.enable = true;
 
