@@ -14,6 +14,8 @@
       "video"          # Access to webcams / video capture devices (for Howdy face recognition)
       "audio"          # Direct audio hardware control
       "dialout"        # Access to serial ports and smartcard/USB devices
+      "scanner"        # Access to scanners
+      "lp"             # Access to CUPS printer hardware and administration
     ];
     shell = pkgs.bash;
   };
