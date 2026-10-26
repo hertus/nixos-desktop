@@ -30,6 +30,23 @@
     ];
   };
 
+  # Declarative Printer Definition (Epson ET-2870 Series)
+  hardware.printers = {
+    ensureDefaultPrinter = "Epson_ET-2870";
+    ensurePrinters = [
+      {
+        name = "Epson_ET-2870";
+        description = "Epson EcoTank ET-2870 Series";
+        location = "Network (10.10.22.5)";
+        deviceUri = "ipp://10.10.22.5/ipp/print";
+        model = "everywhere";
+        ppdOptions = {
+          PageSize = "A4";
+        };
+      }
+    ];
+  };
+
   # Printing & Scanning GUI utilities for KDE Plasma
   environment.systemPackages = with pkgs; [
     kdePackages.print-manager   # KDE System Settings Printer integration
