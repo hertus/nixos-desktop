@@ -16,7 +16,6 @@
     ./users/hertus.nix
     ./packages/default.nix
     ./programs/vscodium.nix
-    ./programs/brave.nix
   ];
 }
 
