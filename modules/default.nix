@@ -14,6 +14,7 @@
     ./security/auth.nix
     ./virtualization/libvirt.nix
     ./users/hertus.nix
+    ./users/family.nix
     ./packages/default.nix
     ./programs/vscodium.nix
     ./programs/tmux.nix
