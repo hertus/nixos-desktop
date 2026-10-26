@@ -37,6 +37,7 @@
     # Browsers & Communication
     brave
     chromium
+    kdePackages.plasma-browser-integration
     teams-for-linux
     teamspeak6-client
     # threema-desktop is superseded by the Threema Flatpak in modules/services/flatpak.nix
